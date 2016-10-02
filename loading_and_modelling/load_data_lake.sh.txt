@@ -1,0 +1,18 @@
+fdisk -l
+mount -t ext4 /dev/xvdf /data
+/root/start-hadoop.sh
+/data/start_postgres.sh
+
+wget http://s3.amazonaws.com/anemani/W205/Exercise1/Hospital_Revised_Flatfiles/hospitals.csv
+wget http://s3.amazonaws.com/anemani/W205/Exercise1/Hospital_Revised_Flatfiles/effective_care.csv
+wget http://s3.amazonaws.com/anemani/W205/Exercise1/Hospital_Revised_Flatfiles/readmissions.csv
+wget http://s3.amazonaws.com/anemani/W205/Exercise1/Hospital_Revised_Flatfiles/Measures.csv
+wget http://s3.amazonaws.com/anemani/W205/Exercise1/Hospital_Revised_Flatfiles/surveys_responses.csv
+
+hdfs dfs -ls
+hdfs dfs -put hospitals.csv /user/w205/hospital_compare
+hdfs dfs -put effective_care.csv /user/w205/hospital_compare
+hdfs dfs -put readmissions.csv /user/w205/hospital_compare
+hdfs dfs -put Measures.csv /user/w205/hospital_compare
+hdfs dfs -put surveys_responses.csv /user/w205/hospital_compare
+
