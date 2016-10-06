@@ -3,16 +3,159 @@ mount -t ext4 /dev/xvdf /data
 /root/start-hadoop.sh
 /data/start_postgres.sh
 
+
 wget http://s3.amazonaws.com/anemani/W205/Exercise1/Hospital_Revised_Flatfiles/hospitals.csv
 wget http://s3.amazonaws.com/anemani/W205/Exercise1/Hospital_Revised_Flatfiles/effective_care.csv
 wget http://s3.amazonaws.com/anemani/W205/Exercise1/Hospital_Revised_Flatfiles/readmissions.csv
 wget http://s3.amazonaws.com/anemani/W205/Exercise1/Hospital_Revised_Flatfiles/Measures.csv
 wget http://s3.amazonaws.com/anemani/W205/Exercise1/Hospital_Revised_Flatfiles/surveys_responses.csv
 
-hdfs dfs -ls
-hdfs dfs -put hospitals.csv /user/w205/hospital_compare
-hdfs dfs -put effective_care.csv /user/w205/hospital_compare
-hdfs dfs -put readmissions.csv /user/w205/hospital_compare
-hdfs dfs -put Measures.csv /user/w205/hospital_compare
-hdfs dfs -put surveys_responses.csv /user/w205/hospital_compare
+tail -n +2 Measures.csv > Measures_noHeader.csv
+tail -n +2 surveys_responses.csv > surveys_responses_noHeader.csv
+tail -n +2 hospitals.csv > hospitals_noHeader.csv
+tail -n +2 effective_care.csv > effective_care_noHeader.csv
+tail -n +2 readmissions.csv > readmissions_noHeader.csv
 
+hdfs dfs -mkdir /user/w205/hospital_compare/hospitals
+hdfs dfs -mkdir /user/w205/hospital_compare/effective_care
+hdfs dfs -mkdir /user/w205/hospital_compare/readmissions
+hdfs dfs -mkdir /user/w205/hospital_compare/Measures
+hdfs dfs -mkdir /user/w205/hospital_compare/surveys_responses
+
+hdfs dfs -ls
+hdfs dfs -put hospitals_noHeader.csv /user/w205/hospital_compare/hospitals
+hdfs dfs -put effective_care_noHeader.csv /user/w205/hospital_compare/effective_care
+hdfs dfs -put readmissions_noHeader.csv /user/w205/hospital_compare/readmissions
+hdfs dfs -put Measures_noHeader.csv /user/w205/hospital_compare/Measures
+hdfs dfs -put surveys_responses_noHeader.csv /user/w205/hospital_compare/surveys_responses
+
+hive
+
+CREATE EXTERNAL TABLE IF NOT EXISTS hospitals_schema
+(Provider_ID string,
+Hospital_Name string,
+Address string,
+City string,
+State string,
+ZIP_Code string,
+County_Name string,
+Phone_Number string,
+Hospital_Type string,
+Hospital_Ownership string,
+Emergency_Services string)
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+WITH SERDEPROPERTIES(
+"separatorChar" = ",",
+"quoteChar"  ="'",
+"escapeChar"  ='\\'
+)
+LOCATION '/user/w205/hospital_compare/hospitals';
+
+CREATE EXTERNAL TABLE IF NOT EXISTS surveys_responses_schema
+(Provider_Number string,
+Hospital_Name string,
+Address string,
+City string,
+State string,
+ZIP_Code string,
+County_Name string,
+Communication_with_Nurses_AchPts string,
+Communication_with_Nurses_ImpPts string,
+Communication_with_Nurses_DimScore string,
+Communication_with_Doctors_AchPts string,
+Communication_with_Doctors_ImpPts string,
+Communication_with_Doctors_DimScore string,
+Responsiveness_of_Hospital_Staff_AchPts string,
+Responsiveness_of_Hospital_Staff_ImpPts string,
+Responsiveness_of_Hospital_Staff_DimScore string,
+Pain_Mgmt_AchPts string,
+Pain_Mgmt_ImpPts string,
+Pain_Mgmt_DimScore string,
+Communication_about_Medicines_AchPts string,
+Communication_about_Medicines_ImpPts string,
+Communication_about_Medicines_DimScore string,
+Cleanliness_and_Quietness_of_Hospital_Environment_AchPts string,
+Cleanliness_and_Quietness_of_Hospital_Environment_ImpPts string,
+Cleanliness_and_Quietness_of_Hospital_Environment_DimScore string,
+Discharge_Information_AchPts string,
+Discharge_Information_ImpPts string,
+Discharge_Information_DimScore string,
+Overall_Rating_of_Hospital_AchPts string,
+Overall_Rating_of_Hospital_ImpPts string,
+Overall_Rating_of_Hospital_DimScore string,
+HCAHPS_Base_Score string,
+HCAHPS_Consistency_Score string)
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+WITH SERDEPROPERTIES(
+"separatorChar" = ",",
+"quoteChar"  ="'",
+"escapeChar"  ='\\'
+)
+LOCATION '/user/w205/hospital_compare/surveys_responses';
+
+CREATE EXTERNAL TABLE IF NOT EXISTS effective_care_schema
+(Provider_ID string,
+Hospital_Name string,
+Address string,
+City string,
+State string,
+ZIP_Code string,
+County_Name string,
+Phone_Number string,
+Condition string,
+Measure_ID string,
+Measure_Name string,
+Score string,
+Sample string,
+Footnote string,
+Measure_Start_Date string,
+Measure_End_Date string)
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+WITH SERDEPROPERTIES(
+"separatorChar" = ",",
+"quoteChar"  ="'",
+"escapeChar"  ='\\'
+)
+LOCATION '/user/w205/hospital_compare/effective_care';
+
+CREATE EXTERNAL TABLE IF NOT EXISTS Measures_schema
+(Measure_Name string,
+Measure_ID string,
+Measure_Start_Quarter string,
+Measure_Start_Date string,
+Measure_End_Quarter string,
+Measure_End_Date string)
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+WITH SERDEPROPERTIES(
+"separatorChar" = ",",
+"quoteChar"  ="'",
+"escapeChar"  ='\\'
+)
+LOCATION '/user/w205/hospital_compare/Measures';
+
+CREATE EXTERNAL TABLE IF NOT EXISTS readmissions_schema
+(Provider_ID string,
+Hospital_Name string,
+Address string,
+City string,
+State string,
+ZIP_Code string,
+County_Name string,
+Phone_Number string,
+Measure_Name string,
+Measure_ID string,
+Compare_to_National string,
+Denominator string,
+Score string,
+Lower_Estimate string,
+Higher_Estimate string,
+Footnote string,
+Measure_Start_Date string,
+Measure_End_Date string)
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+WITH SERDEPROPERTIES(
+"separatorChar" = ",",
+"quoteChar"  ="'",
+"escapeChar"  ='\\'
+)
+LOCATION '/user/w205/hospital_compare/readmissions';
