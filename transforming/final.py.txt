@@ -1,0 +1,3 @@
+final = hs.join(sr,(hs['Hospital_Name'] == sr['Hospital_Name1']) & (hs['Address'] == sr['Address1']),'inner').drop(sr['Hospital_Name1']).drop(sr['Address1']).drop(sr['City1']).drop(sr['State1']).drop(sr['ZIP_Code1']).drop(sr['County_Name1']).withColumn("OverallRating",split(sr.overall_rating_of_hospital_dimscore, ' ')[0]).join(ra,(hs['Hospital_Name'] == ra['Hospital_Name1']) & (hs['Address'] == ra['Address1']),'left').drop(ra['Hospital_Name1']).drop(ra['Address1']).drop(ra['City1']).drop(ra['State1']).drop(ra['ZIP_Code1']).drop(ra['County_Name1']).drop(ra['Phone_Number1']).drop(ra['Provider_ID1']).dropDuplicates()
+
+#I couldn't get the text file saved properly after a long time of playing trouble shooting...I was using this: sc.saveAsTextFile(final, "/home/w205")
