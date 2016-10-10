@@ -1,0 +1,16 @@
+We start by parsing out the "OverallRating" and create descriptive statistics to understand the variable better:
+
++-------+------------------+
+|summary|     OverallRating|
++-------+------------------+
+|  count|             41860|
+|   mean| 3.031438127090301|
+| stddev|2.8886263423705905|
+|    min|                 0|
+|    max|                10|
++-------+------------------+
+
+Next, I cleaned the variables and then regressed this OverallRating survey variable with the HCAHPS_Base_Score variable and got a very high R^2 of: 0.8131181281720886.
+Finally, I performed a regression between the OverallRating survey variable with HCAHPS_Consistency_Score and got a reasonably high R^2 of: 0.5954872552183783.
+
+The high correlations tell us that the survey respondents are good predictors of actual hospital performance.

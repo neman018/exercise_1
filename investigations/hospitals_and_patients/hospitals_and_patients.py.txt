@@ -1,0 +1,11 @@
+from pyspark.sql.functions import col
+from pyspark.sql.types import IntegerType 
+
+regression = final.select('OverallRating','HCAHPS_Base_Score','HCAHPS_Consistency_Score')
+regression = regression.where(regression["HCAHPS_Consistency_Score"] != 'Not Available').where(regression["OverallRating"] != 'Not').withColumn("HCAHPS_Base_Score",regression["HCAHPS_Base_Score"].cast(IntegerType())).withColumn("HCAHPS_Consistency_Score",regression["HCAHPS_Consistency_Score"].cast(IntegerType())).withColumn("OverallRating",regression["OverallRating"].cast(IntegerType()))
+
+regression.describe('OverallRating').show()
+regression.sort(col('OverallRating').desc()).show()
+
+regression.stat.corr("OverallRating","HCAHPS_Base_Score")
+regression.stat.corr("OverallRating","HCAHPS_Consistency_Score")

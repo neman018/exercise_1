@@ -1,0 +1,29 @@
++--------------------+----------------------+-----------------------------+
+|       Hospital_Name|avg(HCAHPS_Base_Score)|avg(HCAHPS_Consistency_Score)|
++--------------------+----------------------+-----------------------------+
+|PHYSICIANS CENTRE...|                  80.0|                         20.0|
+|MANHATTAN SURGICA...|                  80.0|                         20.0|
+|PHYSICIANS MEDICA...|                  80.0|                         20.0|
+|BAYLOR MEDICAL CE...|                  80.0|                         20.0|
+|ADVANCED SURGICAL...|                  80.0|                         20.0|
+|SURGICAL HOSPITAL...|                  80.0|                         20.0|
+|LAFAYETTE SURGICA...|                  80.0|                         20.0|
+|WESTLAKE REGIONAL...|                  80.0|                         20.0|
+|PHYSICIANS' SPECI...|                  80.0|                         20.0|
+|BLACK HILLS SURGI...|                  80.0|                         20.0|
++--------------------+----------------------+-----------------------------+
+
++-------+------------------+------------------------+
+|summary| HCAHPS_Base_Score|HCAHPS_Consistency_Score|
++-------+------------------+------------------------+
+|  count|             41860|                   41860|
+|   mean|25.351170568561873|      16.653177257525083|
+| stddev|18.229944043627306|       3.472844718692685|
+|    min|                 0|                       1|
+|    max|                80|                      20|
++-------+------------------+------------------------+
+
+
+**Refer to the best_hospitals.py code to see why a robust standard deviation and ANOVA was explicitly not displayed. Although, I could manually filter each of these groups and use the .describe() function instead...
+Alternatively, I chose to do an average of the "Consistency Score" which is a round-about way to come to the same conclusion.
+The 10 hospitals (families) listed above are the models of high-quality care! We can see that the average HCAHPS_Consistency_Score is also 20 (the maximum) - therefore we know that with a combination of a high base scare and the maximum consistency score - we can confidently attest to the fact that these are the best hospitals. 

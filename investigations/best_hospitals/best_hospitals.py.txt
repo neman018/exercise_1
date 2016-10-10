@@ -1,0 +1,17 @@
+from pyspark.sql.functions import col
+from pyspark.sql.types import IntegerType 
+
+best_hospitals = final.select('Hospital_Name','HCAHPS_Base_Score','HCAHPS_Consistency_Score')
+best_hospitals = best_hospitals.where(best_hospitals["HCAHPS_Consistency_Score"] != 'Not Available').withColumn("HCAHPS_Base_Score",best_hospitals["HCAHPS_Base_Score"].cast(IntegerType())).withColumn("HCAHPS_Consistency_Score",best_hospitals["HCAHPS_Consistency_Score"].cast(IntegerType()))
+
+#best_hospitals.describe().show()
+best_hospitals.groupBy('Hospital_Name').mean('HCAHPS_Base_Score','HCAHPS_Consistency_Score').sort(col('avg(HCAHPS_Base_Score)').desc()).show(10)
+
+#Our version of PySpark is too old and doesn't have the stdev_pop function available:
+#if it did, I would just use this: 
+best_hospitals.groupBy('Hospital_Name').agg(stdev_pop('Hospital_Name'))
+
+#but because we don't I tried using this instead:
+#import org.apache.spark.sql.functions.sqrt
+#from pyspark.sql.functions import avg 
+#best_hospitals.groupBy('Hospital_Name').agg((sqrt(avg('HCAHPS_Base_Score' * 'HCAHPS_Base_Score') - avg('HCAHPS_Base_Score') * avg('HCAHPS_Base_Score'))).alias('HCAHPS_Base_Score_SD'))

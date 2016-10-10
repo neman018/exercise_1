@@ -1,0 +1,30 @@
+
+
++-------+------------------+------------------------+
+|summary| HCAHPS_Base_Score|HCAHPS_Consistency_Score|
++-------+------------------+------------------------+
+|  count|             41860|                   41860|
+|   mean|25.351170568561873|      16.653177257525083|
+| stddev|18.229944043627306|       3.472844718692685|
+|    min|                 0|                       1|
+|    max|                80|                      20|
++-------+------------------+------------------------+
+
++-----+----------------------+-----------------------------+
+|State|avg(HCAHPS_Base_Score)|avg(HCAHPS_Consistency_Score)|
++-----+----------------------+-----------------------------+
+|   SD|                43.125|                      18.9375|
+|   LA|     39.88461538461539|           18.243589743589745|
+|   VT|                  38.4|                         19.0|
+|   ME|      36.8235294117647|           18.470588235294116|
+|   WI|     36.55384615384615|           18.907692307692308|
+|   MS|     35.38297872340426|           17.574468085106382|
+|   KS|     34.48888888888889|                         18.4|
+|   NE|     34.30434782608695|           18.347826086956523|
+|   IN|     33.16867469879518|            18.42168674698795|
+|   OK|               32.6875|                       17.625|
++-----+----------------------+-----------------------------+
+
+**Refer to the best_states.py code to see why a robust standard deviation and ANOVA was explicitly not displayed. Although, I could manually filter each of these groups and use the .describe() function instead...
+Alternatively, I chose to do an average of the "Consistency Score" which is a round-about way to come to the same conclusion.
+The 10 states listed above are the models of high-quality care! We can see that the average HCAHPS_Consistency_Score are close to 20 (the maximum) but still relatively small comapred to the Base effect size - therefore we know that with a combination of a high base scare and the maximum consistency score - we can confidently attest to the fact that these are the best states.

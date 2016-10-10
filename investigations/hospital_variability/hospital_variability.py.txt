@@ -1,0 +1,22 @@
+from pyspark.sql.functions import col
+from pyspark.sql.types import IntegerType 
+
+procedures_byHospital = final.select('Measure_ID','Score').withColumn("Score",procedures_byHospital["Score"].cast(IntegerType()))
+
+procedures_byHospital.groupBy('Measure_ID').mean('Score').sort(col('avg(Score)').desc()).show(10)
+procedures_byHospital.groupBy('Measure_ID').min('Score').sort(col('min(Score)').desc()).show(10)
+procedures_byHospital.groupBy('Measure_ID').max('Score').sort(col('max(Score)').desc()).show(10)
+
+#Same thing as the last question...I don't have a robust way to measure standard deviations because the stdev function is not defined in our version of PySpark (1.5...needs to be => 1.6). Alternatively, I looped through all of the Measure_ID's using the describe function:
+
+procedures_byHospital.where(procedures_byHospital["Measure_ID"] == 'MORT_30_PN').describe().show()
+procedures_byHospital.where(procedures_byHospital["Measure_ID"] == 'MORT_30_STK').describe().show()
+procedures_byHospital.where(procedures_byHospital["Measure_ID"] == 'READM_30_HF').describe().show()
+procedures_byHospital.where(procedures_byHospital["Measure_ID"] == 'MORT_30_HF').describe().show()
+procedures_byHospital.where(procedures_byHospital["Measure_ID"] == 'READM_30_CABG').describe().show()
+procedures_byHospital.where(procedures_byHospital["Measure_ID"] == 'READM_30_COPD').describe().show()
+procedures_byHospital.where(procedures_byHospital["Measure_ID"] == 'MORT_30_AMI').describe().show()
+procedures_byHospital.where(procedures_byHospital["Measure_ID"] == 'READM_30_PN').describe().show()
+procedures_byHospital.where(procedures_byHospital["Measure_ID"] == 'READM_30_STK').describe().show()
+procedures_byHospital.where(procedures_byHospital["Measure_ID"] == 'READM_30_AMI').describe().show()
+procedures_byHospital.where(procedures_byHospital["Measure_ID"] == 'MORT_30_COPD').describe().show()
